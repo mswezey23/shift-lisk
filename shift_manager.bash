@@ -236,13 +236,13 @@ install_webui() {
         echo "Could not find installation directory for SHIFT web wallet. Install the web wallet manually."
         exit 1;
     fi
-
-    cd public && npm install &>> $logfile || { echo -n "Could not install web wallet node modules. Exiting." && exit 1; }
-
+    
     # Bower config seems to have the wrong permissions. Make sure we change these before trying to use bower.
     if [[ -d /home/$USER/.config ]]; then
         sudo chown -R $USER:$USER /home/$USER/.config &> /dev/null
     fi
+
+    cd public && npm install &>> $logfile || { echo -n "Could not install web wallet node modules. Exiting." && exit 1; }
 
     bower --allow-root install &>> $logfile || { echo -e "\n\nCould not install bower components for the web wallet. Exiting." && exit 1; }
     grunt release &>> $logfile || { echo -e "\n\nCould not build web wallet release. Exiting." && exit 1; }
