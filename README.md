@@ -6,11 +6,11 @@ Automatic install script for Debian based systems Ubuntu, Mint, Debian.
 
 Install Shift (Mainnet)
 ```
-git clone https://github.com/ShiftProject/shift.git && shift/shift_manager.bash install
+git clone https://github.com/mswezey23/shift.git && shift/shift_manager.bash install
 ```
 Install Shift (Testnet)
 ```
-git clone -b testnet https://github.com/ShiftProject/shift.git && shift/shift_manager.bash install
+git clone -b testnet https://github.com/mswezey23/shift.git && shift/shift_manager.bash install
 ```
 Update Shift Manager
 ```
@@ -46,6 +46,7 @@ Rebuild blockchain from official snapshot
 ```
 
 ## Authors
+- Matt Swezey <matt@swezey.io>
 - Mariusz Serek <mariusz@serek.net>
 - Goldeneye (Shift Team)
 - Ralfs (Shift Team)
