@@ -45,6 +45,19 @@ Rebuild blockchain from official snapshot
 ./shift_manager.bash rebuild
 ```
 
+## Mac Installation - (WIP)
+
+Node: 10.18.1
+Yarn: 1.19.0
+NPM: 6.13.6
+
+* Dependencies: 
+- brew install automake autoconf libtool postgresql
+- git submodule init && git submodule update (for running yarn test)
+
+* TODO: Install script
+
+
 ## Authors
 - Matt Swezey <matt@swezey.io>
 - Mariusz Serek <mariusz@serek.net>

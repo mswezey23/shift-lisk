@@ -31,7 +31,9 @@
         "enabled": true,
         "access": {
             "public": false,
-            "whiteList": ["127.0.0.1"]
+            "whiteList": [
+                "127.0.0.1"
+            ]
         },
         "options": {
             "limits": {
@@ -85,7 +87,6 @@
                 "ip": "79.98.30.242",
                 "port": 9305
             },
-
             {
                 "ip": "108.61.196.62",
                 "port": 9305
@@ -210,7 +211,7 @@
     },
     "dapp": {
         "masterrequired": true,
-        "masterpassword": "",
+        "masterpassword": "AyEPDiCCgeaS",
         "autoexec": []
     },
     "nethash": "7337a324ef27e1e234d1e9018cacff7d4f299a09c2df9be460543b8f7ef652f1"
