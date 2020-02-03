@@ -1,0 +1,22 @@
+# Shift Core & Wallet UI
+version: '3.1'
+
+services:
+    db: 
+        image: postgres:9.6.16
+        restart: always
+        environment: 
+            POSTGRES_USER: shift
+            POSTGRES_PASSWORD: testing
+            POSTGRES_DB: shift_db
+            PGDATA:
+    shift:
+        build: .
+        restart: always
+        environment:
+            SHIFT_USER: shift
+            SHIFT_PASSWORD: testing
+        ports:
+          - "9305":"9305"
+        depends_on: 
+          - db

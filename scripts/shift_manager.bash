@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 PATH="/usr/local/bin:/usr/bin:/bin"
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-export LANGUAGE=en_US.UTF-8
+# export LC_ALL=en_US.UTF-8
+# export LANG=en_US.UTF-8
+# export LANGUAGE=en_US.UTF-8
+
+
 version="1.0.0"
 
 cd "$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
@@ -32,14 +34,52 @@ BLOCKCHAIN_URL="https://downloads.shiftnrg.org/snapshot/$NETWORK"
 GIT_BRANCH="$(git branch | sed -n '/\* /s///p')"
 
 install_prereq() {
+
+    if [[ ! -f /usr/bin/sudo ]]; then
+        echo "Install sudo before continuing. Issue: apt-get install sudo as root user."
+        echo "Also make sure that your user has sudo access."
+    fi
+
+    sudo id &> /dev/null || { exit 1; };
+
     echo ""
     echo "-------------------------------------------------------"
     echo "Shift installer script. Version: $version"
     echo "-------------------------------------------------------"
+    
+    echo -n "Running: apt-get update... ";
+    sudo apt-get update  &> /dev/null || \
+    { echo "Could not update apt repositories. Run apt-get update manually. Exiting." && exit 1; };
+    echo -e "done.\n"
 
-    # echo -n "Enable postgresql... "
-    #     sudo update-rc.d postgresql enable
-    # echo -e "done.\n"
+    echo -n "Running: apt-get install curl build-essential python lsb-release wget openssl autoconf libtool automake libsodium-dev jq dnsutils ... ";
+    sudo apt-get install -y -qq curl build-essential python lsb-release wget openssl autoconf libtool automake libsodium-dev jq dnsutils &>> $logfile || \
+    { echo "Could not install packages prerequisites. Exiting." && exit 1; };
+    echo -e "done.\n"
+
+#    echo -n "Removing former postgresql installation... ";
+#    sudo apt-get purge -y -qq postgres* &>> $logfile || \
+#    { echo "Could not remove former installation of postgresql. Exiting." && exit 1; };
+#    echo -e "done.\n"
+
+    echo -n "Updating apt repository sources for postgresql.. ";
+    sudo bash -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main" > /etc/apt/sources.list.d/pgdg.list' &>> $logfile || \
+    { echo "Could not add postgresql repo to apt." && exit 1; }
+    echo -e "done.\n"
+
+    echo -n "Adding postgresql repo key... "
+    sudo wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add - &>> $logfile || \
+    { echo "Could not add postgresql repo key. Exiting." && exit 1; }
+    echo -e "done.\n"
+
+    echo -n "Installing postgresql... "
+    sudo apt-get update -qq &> /dev/null && sudo apt-get install -y -qq postgresql-9.6 postgresql-contrib-9.6 libpq-dev &>> $logfile || \
+    { echo "Could not install postgresql. Exiting." && exit 1; }
+    echo -e "done.\n"
+
+    echo -n "Enable postgresql... "
+        sudo update-rc.d postgresql enable
+    echo -e "done.\n"
 
     return 0;
 }
@@ -47,13 +87,13 @@ install_prereq() {
 ntp_checks() {
     # Install NTP or Chrony for Time Management - Physical Machines only
     if [[ ! -f "/proc/user_beancounters" ]]; then
-      if ! pgrep -x "openntpd" > /dev/null; then
+      if ! sudo pgrep -x "ntpd" > /dev/null; then
         echo -n "Installing NTP... "
-        # apt-get install ntp -yyq &>> $logfile
-        # service ntp stop &>> $logfile
-        # ntpdate pool.ntp.org &>> $logfile
-        # service ntp start &>> $logfile
-        if ! pgrep -x "openntpd" > /dev/null; then
+        sudo apt-get install ntp -yyq &>> $logfile
+        sudo service ntp stop &>> $logfile
+        sudo ntpdate pool.ntp.org &>> $logfile
+        sudo service ntp start &>> $logfile
+        if ! sudo pgrep -x "ntpd" > /dev/null; then
           echo -e "SHIFT requires NTP running. Please check /etc/ntp.conf and correct any issues. Exiting."
           exit 1
         echo -e "done.\n"
@@ -117,20 +157,20 @@ add_pg_user_database() {
     if start_postgres; then
         user_exists=$(grep postgres /etc/passwd |wc -l);
         if [[ $user_exists == 1 ]]; then
-            res=$(sudo -u postgres psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$DB_UNAME'" 2> /dev/null)
+            res=$(sudo -u shift psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$DB_UNAME'" 2> /dev/null)
             if [[ $res -ne 1 ]]; then
               echo -n "Creating database user... "
-              res=$(sudo -u postgres psql -c "CREATE USER $DB_UNAME WITH PASSWORD '$DB_PASSWD';" 2> /dev/null)
-              res=$(sudo -u postgres psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$DB_UNAME'" 2> /dev/null)
+              res=$(sudo -u shift psql -c "CREATE USER $DB_UNAME WITH PASSWORD '$DB_PASSWD';" 2> /dev/null)
+              res=$(sudo -u shift psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$DB_UNAME'" 2> /dev/null)
               if [[ $res -eq 1 ]]; then
                 echo -e "done.\n"
               fi
             fi
 
             echo -n "Creating database... "
-            res=$(sudo -u postgres dropdb --if-exists "$DB_NAME" 2> /dev/null)
-            res=$(sudo -u postgres createdb -O "$DB_UNAME" "$DB_NAME" 2> /dev/null)
-            res=$(sudo -u postgres psql -t -c "SELECT count(*) FROM pg_database where datname='$DB_NAME'" 2> /dev/null)
+            res=$(sudo -u shift dropdb --if-exists "$DB_NAME" 2> /dev/null)
+            res=$(sudo -u shift createdb -O "$DB_UNAME" "$DB_NAME" 2> /dev/null)
+            res=$(sudo -u shift psql -t -c "SELECT count(*) FROM pg_database where datname='$DB_NAME'" 2> /dev/null)
             if [[ $res -eq 1 ]]; then
                 echo -e "done.\n"
             fi
@@ -157,6 +197,65 @@ start_postgres() {
 
     return 0
 }
+
+install_node_npm() {
+
+    echo -n "Installing nodejs and npm... "
+    curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - &>> $logfile
+    sudo apt-get install -y -qq nodejs &>> $logfile || { echo "Could not install nodejs and npm. Exiting." && exit 1; }
+    echo -e "done.\n" && echo -n "Installing grunt-cli... "
+    sudo npm install grunt-cli -g &>> $logfile || { echo "Could not install grunt-cli. Exiting." && exit 1; }
+    echo -e "done.\n" && echo -n "Installing bower... "
+    sudo npm install bower -g &>> $logfile || { echo "Could not install bower. Exiting." && exit 1; }
+    echo -e "done.\n" && echo -n "Installing process management software... "
+    sudo npm install forever -g &>> $logfile || { echo "Could not install process management software(forever). Exiting." && exit 1; }
+    echo -e "done.\n"
+
+    return 0;
+}
+
+install_shift() {
+
+    echo -n "Installing Shift core... "
+    npm install --production &>> $logfile || { echo "Could not install SHIFT, please check the log directory. Exiting." && exit 1; }
+    echo -e "done.\n"
+
+    return 0;
+}
+
+install_webui() {
+
+    echo -n "Installing Shift WebUi... "
+    git clone https://github.com/mswezey23/shift-wallet &>> $logfile || { echo -n "Could not clone git wallet source. Exiting." && exit 1; }
+
+    if [[ -d "public" ]]; then
+        rm -rf public/
+    fi
+
+    if [[ -d "shift-wallet" ]]; then
+        mv shift-wallet public
+    else
+        echo "Could not find installation directory for SHIFT web wallet. Install the web wallet manually."
+        exit 1;
+    fi
+    
+    # Bower config seems to have the wrong permissions. Make sure we change these before trying to use bower.
+    if [[ -d /home/$USER/.config ]]; then
+        sudo chown -R $USER:$USER /home/$USER/.config &> /dev/null
+    fi
+
+    cd public && npm install &>> $logfile || { echo -n "Could not install web wallet node modules. Exiting." && exit 1; }
+
+    bower --allow-root install &>> $logfile || { echo -e "\n\nCould not install bower components for the web wallet. Exiting." && exit 1; }
+    grunt release &>> $logfile || { echo -e "\n\nCould not build web wallet release. Exiting." && exit 1; }
+    echo "done."
+
+    cd ..
+    
+    return 0;
+
+}
+
 
 update_manager() {
 
@@ -221,7 +320,7 @@ stop_shift() {
     echo -n "Stopping Shift... "
     forever_exists=$(whereis forever | awk {'print $2'})
     if [[ ! -z $forever_exists ]]; then
-        $forever_exists stop $root_path/app.js &>> $logfile
+        npx $forever_exists stop $root_path/app.js &>> $logfile
     fi
 
     sleep 2
@@ -235,10 +334,17 @@ stop_shift() {
 }
 
 start_shift() {
-    echo -n "Starting Shift... "
+    echo -n "Starting Shift Image... "
+
+    echo -n "Starting DB... "
+    /usr/lib/postgresql/9.6/bin/postgres -D "/var/lib/postgresql/9.6/main" -c "config_file=/etc/postgresql/9.6/main/postgresql.conf" >logfile 2>&1 &
+
+    sleep 2
+
+    echo -n "Starting Shift Core... "
     forever_exists=$(whereis forever | awk {'print $2'})
     if [[ ! -z $forever_exists ]]; then
-        $forever_exists start -o $root_path/logs/shift_console.log -e $root_path/logs/shift_err.log app.js -c "$SHIFT_CONFIG" &>> $logfile || \
+        forever start -o $root_path/logs/shift_console.log -e $root_path/logs/shift_err.log app.js -c "$SHIFT_CONFIG" &>> $logfile || \
         { echo -e "\nCould not start Shift." && exit 1; }
     fi
 
@@ -271,7 +377,7 @@ start_shift() {
 }
 
 running() {
-    process=$(forever list |grep app.js |awk {'print $9'})
+    process=$(npx forever list |grep app.js |awk {'print $9'})
     if [[ -z $process ]] || [[ "$process" == "STOPPED" ]]; then
         return 1
     fi
@@ -314,7 +420,10 @@ case $1 in
       start_log
       # install_prereq
       # ntp_checks
-      # add_pg_user_database
+      add_pg_user_database
+      # install_node_npm
+      # install_shift
+      # install_webui
       echo ""
       echo ""
       echo "SHIFT successfully installed"
@@ -367,7 +476,7 @@ case $1 in
     "start")
       parse_option $@
       start_shift
-      show_blockHeight
+      # show_blockHeight
     ;;
     "snapshot")
       parse_option $@
@@ -378,8 +487,8 @@ case $1 in
     ;;
 
 *)
-    echo 'Available options: reload (stop/start), rebuild (official snapshot), start, stop, update_manager, update_client, update_wallet'
-    echo 'Usage: ./shift_installer.bash start'
+    echo 'Available options: install, reload (stop/start), rebuild (official snapshot), start, stop, update_manager, update_client, update_wallet'
+    echo 'Usage: ./shift_installer.bash install'
     exit 1
 ;;
 esac
