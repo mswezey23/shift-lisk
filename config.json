@@ -9,11 +9,11 @@
     "topAccounts": false,
     "cacheEnabled": false,
     "db": {
-        "host": "localhost",
+        "host": "db",
         "port": 5432,
         "database": "shift_db",
         "user": "shift",
-        "password": "testing",
+        "password": "password",
         "poolSize": 95,
         "poolIdleTimeout": 30000,
         "reapIntervalMillis": 1000,

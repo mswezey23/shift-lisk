@@ -6,17 +6,33 @@ services:
         image: postgres:9.6.16
         restart: always
         environment: 
-            POSTGRES_USER: shift
-            POSTGRES_PASSWORD: testing
-            POSTGRES_DB: shift_db
-            PGDATA:
+            POSTGRES_USER: ${SHIFT_USER}
+            POSTGRES_PASSWORD: ${SHIFT_PASS}
+            POSTGRES_DB: ${SHIFT_DB}
+
+    # redis:
+    #     image: redis
+    #     container_name: cache
+    #     expose:
+    #       - 6379
+        
     shift:
         build: .
         restart: always
         environment:
-            SHIFT_USER: shift
-            SHIFT_PASSWORD: testing
+            NODE_ENV: production
+            SHIFT_USER: ${SHIFT_USER}
+            SHIFT_PASS: ${SHIFT_PASS}
+            SHIFT_DB: ${SHIFT_DB}
+            DATABASE_URL: db://${SHIFT_USER}:${SHIFT_PASS}@postgres:${SHIFT_DB_PORT}/${SHIFT_DB}
+            WAIT_HOSTS: db:${SHIFT_DB_PORT}
         ports:
-          - "9305":"9305"
+          - 9305:9305
         depends_on: 
           - db
+        volumes:
+          - .:/home/shift
+          - /home/shift/node_modules
+          - /home/shift/shift-wallet/node_modules
+
+    
