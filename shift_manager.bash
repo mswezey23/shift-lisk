@@ -13,9 +13,9 @@ logfile=$root_path/logs/shift_manager.log
 
 set_network() {
   if [ "$(grep "7337a324ef27e1e234d1e9018cacff7d4f299a09c2df9be460543b8f7ef652f1" $SHIFT_CONFIG )" ];then
-    NETWORK="main"
+    NETWORK="mainnet"
   elif [ "$(grep "cba57b868c8571599ad594c6607a77cad60cf0372ecde803004d87e679117c12" $SHIFT_CONFIG )" ];then
-    NETWORK="test"
+    NETWORK="testnet"
   else
     NETWORK="unknown"
   fi
@@ -28,7 +28,8 @@ DB_PASSWD="$(grep "password" $SHIFT_CONFIG | cut -f 4 -d '"' | head -1)"
 DB_SNAPSHOT="blockchain.db.gz"
 NETWORK=""
 set_network
-BLOCKCHAIN_URL="https://downloads.shiftnrg.org/snapshot/$NETWORK"
+#BLOCKCHAIN_URL="https://downloads.shiftnrg.org/snapshot/$NETWORK"
+BLOCKCHAIN_URL="https://snapshot.shiftnrg.io/$NETWORK"
 GIT_BRANCH="$(git branch | sed -n '/\* /s///p')"
 
 install_prereq() {
@@ -50,7 +51,7 @@ install_prereq() {
     { echo "Could not update apt repositories. Run apt-get update manually. Exiting." && exit 1; };
     echo -e "done.\n"
 
-    echo -n "Running: apt-get install curl build-essential python lsb-release wget openssl autoconf libtool automake libsodium-dev jq dnsutils ... ";
+    echo -n "Running: apt-get install npm curl build-essential python lsb-release wget openssl autoconf libtool automake libsodium-dev jq dnsutils ... ";
     sudo apt-get install -y -qq curl build-essential python lsb-release wget openssl autoconf libtool automake libsodium-dev jq dnsutils &>> $logfile || \
     { echo "Could not install packages prerequisites. Exiting." && exit 1; };
     echo -e "done.\n"
@@ -116,13 +117,13 @@ create_database() {
 }
 
 download_blockchain() {
-    echo -n "Download a recent, verified snapshot? ([y]/n): "
+    echo -n "Download a recent, verified snapshot: $NETWORK? ([y]/n): "
     read downloadornot
 
     if [ "$downloadornot" == "y" ] || [ -z "$downloadornot" ]; then
         rm -f $DB_SNAPSHOT
         if [ -z "$BLOCKCHAIN_URL" ]; then
-            BLOCKCHAIN_URL="https://downloads.shiftnrg.org/snapshot/$NETWORK"
+            BLOCKCHAIN_URL="https://snapshot.shiftnrg.io/$NETWORK"
         fi
         echo "√ Downloading $DB_SNAPSHOT from $BLOCKCHAIN_URL"
         curl --progress-bar -o $DB_SNAPSHOT "$BLOCKCHAIN_URL/$DB_SNAPSHOT"
@@ -214,7 +215,7 @@ install_node_npm() {
 
 install_shift() {
 
-    echo -n "Installing Shift core... "
+    echo -n "Installing Shift core testnet... "
     npm install --production &>> $logfile || { echo "Could not install SHIFT, please check the log directory. Exiting." && exit 1; }
     echo -e "done.\n"
 
@@ -223,7 +224,7 @@ install_shift() {
 
 install_webui() {
 
-    echo -n "Installing Shift WebUi... "
+    echo -n "Installing Shift WebUi testnet... "
     git clone https://github.com/mswezey23/shift-wallet &>> $logfile || { echo -n "Could not clone git wallet source. Exiting." && exit 1; }
 
     if [[ -d "public" ]]; then
@@ -236,7 +237,7 @@ install_webui() {
         echo "Could not find installation directory for SHIFT web wallet. Install the web wallet manually."
         exit 1;
     fi
-    
+
     # Bower config seems to have the wrong permissions. Make sure we change these before trying to use bower.
     if [[ -d /home/$USER/.config ]]; then
         sudo chown -R $USER:$USER /home/$USER/.config &> /dev/null

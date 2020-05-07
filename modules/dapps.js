@@ -624,17 +624,31 @@ __private.createRoutes = function (dapp, cb) {
 			routes.forEach(function (router) {
 				if (router.method === 'get' || router.method === 'post' || router.method === 'put') {
 					__private.routes[dapp.transactionId][router.method](router.path, function (req, res) {
+					    if (req.headers && req.headers['content-type'] && req.headers['content-type'].indexOf('multipart/form-data') != -1) {			    	
+					        var chunks = [];
+					        req.on('data', function(chunk) { 
+					            chunks.push(chunk)
+					        });	
+					        req.on('end', function() { 
+					        	req.body = Buffer.concat(chunks);
+								sendRequest(req);
+					        }); 
+					    } else {
+							sendRequest(router.method === 'get' ? req.query : req.body);
+					    }
 
-						self.request(dapp.transactionId, router.method, router.path, (router.method === 'get') ? req.query : req.body, function (err, body) {
-							if (!err && body.error) {
-								err = body.error;
-							}
-							if (err) {
-								body = {error: err};
-							}
-							body.success = !err;
-							res.json(body);
-						});
+					    function sendRequest(query) {
+							self.request(dapp.transactionId, router.method, router.path, query, function (err, body) {
+								if (!err && body.error) {
+									err = body.error;
+								}
+								if (err) {
+									body = {error: err};
+								}
+								body.success = !err;
+								res.json(body);
+							});
+						}
 					});
 				}
 			});
@@ -690,6 +704,11 @@ __private.launchDApp = function (body, cb) {
 				return setImmediate(waterCb, 'Application already launched');
 			} else {
 				body.params = body.params || [''];
+
+				if (body.params.length > 0) {
+					body.params.push('modules.full.json');
+				}
+
 				__private.launched[body.id] = true;
 
 				return setImmediate(waterCb);
@@ -730,7 +749,7 @@ __private.launchDApp = function (body, cb) {
 		},
 		function (dapp, waterCb) {
 			dapp.relaunchBody = body;
-			__private.createSandbox(dapp, body.params || [], function (err) {
+			__private.createSandbox(dapp, body.params || ['', 'modules.full.json'], function (err) {
 				if (err) {
 					__private.launched[body.id] = false;
 					return setImmediate(waterCb, err);

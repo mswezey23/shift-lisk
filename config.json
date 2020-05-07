@@ -1,5 +1,5 @@
 {
-    "port": 9305,
+    "port": 9405,
     "address": "0.0.0.0",
     "fileLogLevel": "info",
     "logFileName": "logs/shift.log",
@@ -9,11 +9,11 @@
     "topAccounts": false,
     "cacheEnabled": false,
     "db": {
-        "host": "db",
+        "host": "localhost",
         "port": 5432,
-        "database": "shift_db",
-        "user": "shift",
-        "password": "password",
+        "database": "shift_db_testnet",
+        "user": "shift_testnet",
+        "password": "testing",
         "poolSize": 95,
         "poolIdleTimeout": 30000,
         "reapIntervalMillis": 1000,
@@ -30,10 +30,8 @@
     "api": {
         "enabled": true,
         "access": {
-            "public": false,
-            "whiteList": [
-                "127.0.0.1"
-            ]
+            "public": true,
+            "whiteList": ["127.0.0.1"]
         },
         "options": {
             "limits": {
@@ -48,120 +46,16 @@
         "enabled": true,
         "list": [
             {
-                "ip": "193.70.110.88",
-                "port": 9305
+                "ip": "195.181.247.81",
+                "port": 9405
             },
             {
-                "ip": "193.70.110.87",
-                "port": 9305
+                "ip": "80.208.231.67",
+                "port": 9405
             },
             {
-                "ip": "212.24.105.142",
-                "port": 9305
-            },
-            {
-                "ip": "212.24.103.88",
-                "port": 9305
-            },
-            {
-                "ip": "45.76.33.26",
-                "port": 9305
-            },
-            {
-                "ip": "45.63.9.158",
-                "port": 9305
-            },
-            {
-                "ip": "104.40.149.89",
-                "port": 9305
-            },
-            {
-                "ip": "40.68.255.154",
-                "port": 9305
-            },
-            {
-                "ip": "40.68.250.35",
-                "port": 9305
-            },
-            {
-                "ip": "79.98.30.242",
-                "port": 9305
-            },
-            {
-                "ip": "108.61.196.62",
-                "port": 9305
-            },
-            {
-                "ip": "45.32.153.244",
-                "port": 9305
-            },
-            {
-                "ip": "104.154.37.132",
-                "port": 9305
-            },
-            {
-                "ip": "138.197.129.40",
-                "port": 9305
-            },
-            {
-                "ip": "91.121.64.132",
-                "port": 9305
-            },
-            {
-                "ip": "13.66.225.208",
-                "port": 9305
-            },
-            {
-                "ip": "108.61.166.33",
-                "port": 9305
-            },
-            {
-                "ip": "45.32.156.174",
-                "port": 9305
-            },
-            {
-                "ip": "173.253.129.20",
-                "port": 9305
-            },
-            {
-                "ip": "212.24.98.226",
-                "port": 9305
-            },
-            {
-                "ip": "108.61.167.39",
-                "port": 9305
-            },
-            {
-                "ip": "138.68.146.65",
-                "port": 9305
-            },
-            {
-                "ip": "46.101.161.74",
-                "port": 9305
-            },
-            {
-                "ip": "37.247.116.145",
-                "port": 9305
-            },
-            {
-                "ip": "104.238.191.221",
-                "port": 9305
-            },
-            {
-                "ip": "67.205.138.171",
-                "port": 9305
-            },
-            {
-                "ip": "159.203.41.88",
-                "port": 9305
-            },
-            {
-                "ip": "66.11.122.128",
-                "port": 9305
-            },
-            {
-                "ip": "92.52.46.192",
-                "port": 9305
+                "ip": "45.32.176.167",
+                "port": 9405
             }
         ],
         "access": {
@@ -187,6 +81,31 @@
     "transactions": {
         "maxTxsPerQueue": 1000
     },
+    "storage": {
+        "peers": [
+            {
+                "ip": "195.181.247.81"
+            },
+            {
+                "ip": "89.40.5.14"
+            },
+            {
+                "ip": "94.176.235.137"
+            },
+            {
+                "ip": "45.32.176.167"
+            },
+            {
+                "ip": "5.196.14.172"
+            },
+            {
+                "ip": "80.208.231.67"
+            }
+        ],
+        "options": {
+            "timeout": 10000
+        }
+    },
     "forging": {
         "force": false,
         "secret": [],
@@ -203,7 +122,7 @@
     "ssl": {
         "enabled": false,
         "options": {
-            "port": 9306,
+            "port": 9406,
             "address": "0.0.0.0",
             "key": "./ssl/shift.key",
             "cert": "./ssl/shift.crt"
@@ -211,8 +130,8 @@
     },
     "dapp": {
         "masterrequired": true,
-        "masterpassword": "AyEPDiCCgeaS",
+        "masterpassword": "",
         "autoexec": []
     },
-    "nethash": "7337a324ef27e1e234d1e9018cacff7d4f299a09c2df9be460543b8f7ef652f1"
+    "nethash": "cba57b868c8571599ad594c6607a77cad60cf0372ecde803004d87e679117c12"
 }
