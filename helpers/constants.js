@@ -58,16 +58,18 @@
  * @property {number} unconfirmedTransactionTimeOut - 1080 blocks
  */
 module.exports = {
-	currentVersion: '7.2.0t',
+	currentVersion: '7.3.0t',
 	minVersion: [
 		{ height: 1,      ver: '^6.0.1t'},
 		{ height: 370000, ver: '^6.3.0t'},
 		{ height: 640000, ver: '^6.5.0t'},
 		{ height: 1617500, ver: '^6.8.0t'},
-		{ height: 2700000, ver: '>=6.8.0'},
-		{ height: 2725930, ver: '>6.9.0'},
-		{ height: 2924610, ver: '^7.0.0'},
-		{ height: 2954429, ver: '^7.1.0'}
+		{ height: 2700000, ver: '>=6.8.0t'},
+		{ height: 2725930, ver: '>6.9.0t'},
+		{ height: 2924610, ver: '^7.0.0t'},
+		{ height: 2954429, ver: '^7.1.0t'},
+		{ height: 4000000, ver: '^7.2.0t'},
+		{ height: 4044800, ver: '^7.3.0t'}
 	],
 	activeDelegates: 101,
 	addressLength: 208,
@@ -154,7 +156,7 @@ module.exports = {
 		{ height: 640000,   reward: 110000000, salary: 0 },
 		{ height: 1617500,  reward: 100000000, salary: 10000000 },
 		{ height: 3164000,  reward: 90000000,  salary: 10000000 },
-		{ height: 4332000,  reward: 80000000,  salary: 9000000 }
+		{ height: 4000000,  reward: 80000000,  salary: 0 }
 	],
 	locks: [
 		{ height: 1, replication: 3, ratioFactor: 100, buffer: 10 }
@@ -165,5 +167,5 @@ module.exports = {
 	clusterTolerance: 5,
 	signatureLength: 196,
 	totalAmount: 1009000000000000,
-	unconfirmedTransactionTimeOut: 10800 // 1080 blocks
+	unconfirmedTransactionTimeOut: 10800 // 1 blocks
 };

@@ -225,7 +225,7 @@ install_shift() {
 install_webui() {
 
     echo -n "Installing Shift WebUi testnet... "
-    git clone https://github.com/mswezey23/shift-wallet &>> $logfile || { echo -n "Could not clone git wallet source. Exiting." && exit 1; }
+    git clone https://github.com/shiftnrg/shift-wallet &>> $logfile || { echo -n "Could not clone git wallet source. Exiting." && exit 1; }
 
     if [[ -d "public" ]]; then
         rm -rf public/
@@ -259,7 +259,7 @@ install_webui() {
 update_manager() {
 
     echo -n "Updating Shift Manager ... "
-    wget -q -O shift_manager.bash https://raw.githubusercontent.com/mswezey23/shift/$GIT_BRANCH/shift_manager.bash
+    wget -q -O shift_manager.bash https://raw.githubusercontent.com/shiftnrg/shift/$GIT_BRANCH/shift_manager.bash
     echo "done."
 
     return 0;
