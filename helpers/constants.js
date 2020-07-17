@@ -167,5 +167,5 @@ module.exports = {
 	clusterTolerance: 5,
 	signatureLength: 196,
 	totalAmount: 1009000000000000,
-	unconfirmedTransactionTimeOut: 10800 // 1 blocks
+	unconfirmedTransactionTimeOut: 1 // 1 blocks
 };
