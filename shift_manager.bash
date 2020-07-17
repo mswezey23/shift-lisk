@@ -41,9 +41,10 @@ install_prereq() {
 
     res=$(cat /etc/os-release | grep 16.04)
     if [[ $res  ]]; then
-      echo "Ubuntu 16.04 No longer support !!!"
-      echo "Please spin up Ubuntu 18.04 and install there :)"
-      echo "Thank you, w/ <3 Shift"
+      echo -e "Ubuntu 16.04 No longer support !!!"
+      echo -e "Please spin up Ubuntu 18.04 and install there :)"
+      echo -e "Thank you, w/ <3 Shift"
+      exit 1
     fi
 
     sudo id &> /dev/null || { exit 1; };
