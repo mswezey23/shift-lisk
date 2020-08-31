@@ -267,7 +267,7 @@ install_webui() {
 update_manager() {
 
     echo -n "Updating Shift Manager ... "
-    wget -q -O shift_manager.bash https://raw.githubusercontent.com/shiftnrg/shift/$GIT_BRANCH/shift_manager.bash
+    wget -q -O shift_manager.bash https://raw.githubusercontent.com/shiftnrg/shift-lisk/$GIT_BRANCH/shift_manager.bash
     echo "done."
 
     return 0;
