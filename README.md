@@ -1,4 +1,4 @@
-## SHIFT version 6.8.5
+## SHIFT version 6.9.0
 
 ## Installation
 
