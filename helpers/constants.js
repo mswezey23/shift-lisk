@@ -158,7 +158,7 @@ module.exports = {
 		{ height: 1617500,  reward: 100000000, salary: 10000000 },
 		{ height: 3164000,  reward: 90000000,  salary: 10000000 },
 		{ height: 4000000,  reward: 80000000,  salary: 0 },
-		{ height: 4125925,  reward: 100000000,  salary: 0 } // ~ Friday 12PM CST 09/04/2020
+		{ height: 4119525,  reward: 100000000,  salary: 0 } // ~ Wed 12PM CST 09/02/2020
 	],
 	locks: [
 		{ height: 1, replication: 3, ratioFactor: 100, buffer: 10 }
