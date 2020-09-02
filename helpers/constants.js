@@ -41,13 +41,14 @@
  * @property {number} unconfirmedTransactionTimeOut - 1080 blocks
  */
 module.exports = {
-	currentVersion: '6.8.5',
+	currentVersion: '6.9.0',
 	minVersion: [
 		{ height: 1,      ver: '^6.1.0'},
 		{ height: 600000, ver: '^6.3.0'},
 		{ height: 828000, ver: '^6.5.1'},
 		{ height: 1015000, ver: '^6.6.2'},
-		{ height: 1996000, ver: '^6.8.0'}
+		{ height: 1996000, ver: '^6.8.0'},
+		{ height: 4409979, ver: '^6.9.0'}
 	],
 	activeDelegates: 101,
 	addressLength: 208,
@@ -116,7 +117,7 @@ module.exports = {
 		{ height: 1996000,  reward: 90000000,   salary: 10000000 },
 		{ height: 3164000,  reward: 70000000,   salary: 8000000 },
 		{ height: 4332000,  reward: 50000000,   salary: 6000000 },
-		{ height: 5500000,  reward: 30000000,   salary: 4000000 }
+		{ height: 4409979,  reward: 100000000,  salary: 0 } // ~Friday 12PM CST 09/11/2020
 	],
 	signatureLength: 196,
 	totalAmount: 1009000000000000,
