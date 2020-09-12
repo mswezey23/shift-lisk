@@ -65,7 +65,7 @@ Transfer.prototype.verify = function (trs, sender, cb) {
 	}
 
 	// Team Wallet Funds locked to 1 address
-	if (sender && sender.address && sender.address == exceptions.teamFundAccounts.hasOwnProperty(sender.address)) {
+	if (sender && sender.address && exceptions.teamFundAccounts.hasOwnProperty(sender.address)) {
 		if (trs.recipientId && trs.recipientId !== exceptions.teamFundRecipientAddress) {
 			return setImmediate(cb, `Wrong recipient, funds must be sent to: ${exceptions.teamFundRecipientAddress}`);
 		}
