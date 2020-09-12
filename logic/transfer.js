@@ -1,6 +1,7 @@
 'use strict';
 
 var constants = require('../helpers/constants.js');
+const exceptions = require('../helpers/exceptions.js');
 
 // Private fields
 var modules;
@@ -12,7 +13,7 @@ var modules;
  * @classdesc Main transfer logic.
  */
 // Constructor
-function Transfer () {}
+function Transfer() { }
 
 // Public methods
 /**
@@ -63,6 +64,13 @@ Transfer.prototype.verify = function (trs, sender, cb) {
 		return setImmediate(cb, 'Missing recipient');
 	}
 
+	// Team Wallet Funds locked to 1 address
+	if (sender && sender.address && sender.address == exceptions.teamFundAccounts.hasOwnProperty(sender.address)) {
+		if (trs.recipientId && trs.recipientId !== exceptions.teamFundRecipientAddress) {
+			return setImmediate(cb, `Wrong recipient, funds must be sent to: ${exceptions.teamFundRecipientAddress}`);
+		}
+	}
+
 	if (trs.amount <= 0) {
 		return setImmediate(cb, 'Invalid transaction amount');
 	}
@@ -101,7 +109,7 @@ Transfer.prototype.getBytes = function (trs) {
  * @return {setImmediateCallback} error, cb
  */
 Transfer.prototype.apply = function (trs, block, sender, cb) {
-	modules.accounts.setAccountAndGet({address: trs.recipientId}, function (err, recipient) {
+	modules.accounts.setAccountAndGet({ address: trs.recipientId }, function (err, recipient) {
 		if (err) {
 			return setImmediate(cb, err);
 		}
@@ -131,7 +139,7 @@ Transfer.prototype.apply = function (trs, block, sender, cb) {
  * @return {setImmediateCallback} error, cb
  */
 Transfer.prototype.undo = function (trs, block, sender, cb) {
-	modules.accounts.setAccountAndGet({address: trs.recipientId}, function (err, recipient) {
+	modules.accounts.setAccountAndGet({ address: trs.recipientId }, function (err, recipient) {
 		if (err) {
 			return setImmediate(cb, err);
 		}

@@ -42,7 +42,7 @@ __private.types = {};
  * @return {setImmediateCallback} With `this` as data.
  */
 // Constructor
-function Transaction (db, ed, schema, genesisblock, account, logger, cb) {
+function Transaction(db, ed, schema, genesisblock, account, logger, cb) {
 	this.scope = {
 		db: db,
 		ed: ed,
@@ -238,6 +238,8 @@ Transaction.prototype.getBytes = function (trs, skipSignature, skipSecondSignatu
 					if (trs.recipientId !== exceptions.addresses[trs.id]) {
 						throw 'Recipient address ' + trs.recipientId + ' does not match the one fixed in exception: ' + exceptions.addresses[trs.id];
 					}
+				} else if (trs.recipientId === exceptions.burnAddress) {
+					throw 'Burner Address not yet enabled';
 				} else {
 					throw 'Recipient address number exceeds uint64 range';
 				}
@@ -352,10 +354,10 @@ Transaction.prototype.checkBalance = function (amount, balance, trs, sender) {
 	var exceeded = (trs.blockId !== this.scope.genesisblock.block.id && exceededBalance);
 	var err;
 
-	if (exceeded)	{
+	if (exceeded) {
 		err = [
 			'Account does not have enough SHIFT:', sender.address,
-			'balance:', new bignum(sender[balance].toString() || '0').div(Math.pow(10,8))
+			'balance:', new bignum(sender[balance].toString() || '0').div(Math.pow(10, 8))
 		].join(' ');
 
 		if (exceptions.balance.indexOf(trs.id) > -1) {
@@ -774,7 +776,7 @@ Transaction.prototype.apply = function (trs, block, sender, cb) {
 
 	amount = amount.toNumber();
 
-	this.scope.logger.trace('Logic/Transaction->apply', {sender: sender.address, balance: -amount, blockId: block.id, round: modules.rounds.calc(block.height)});
+	this.scope.logger.trace('Logic/Transaction->apply', { sender: sender.address, balance: -amount, blockId: block.id, round: modules.rounds.calc(block.height) });
 	this.scope.account.merge(sender.address, {
 		balance: -amount,
 		blockId: block.id,
@@ -818,7 +820,7 @@ Transaction.prototype.apply = function (trs, block, sender, cb) {
 Transaction.prototype.undo = function (trs, block, sender, cb) {
 	var amount = new bignum(trs.amount.toString()).plus(trs.fee.toString()).toNumber();
 
-	this.scope.logger.trace('Logic/Transaction->undo', {sender: sender.address, balance: amount, blockId: block.id, round: modules.rounds.calc(block.height)});
+	this.scope.logger.trace('Logic/Transaction->undo', { sender: sender.address, balance: amount, blockId: block.id, round: modules.rounds.calc(block.height) });
 	this.scope.account.merge(sender.address, {
 		balance: amount,
 		blockId: block.id,
@@ -876,14 +878,14 @@ Transaction.prototype.applyUnconfirmed = function (trs, sender, requester, cb) {
 
 	amount = amount.toNumber();
 
-	this.scope.account.merge(sender.address, {u_balance: -amount}, function (err, sender) {
+	this.scope.account.merge(sender.address, { u_balance: -amount }, function (err, sender) {
 		if (err) {
 			return setImmediate(cb, err);
 		}
 
 		__private.types[trs.type].applyUnconfirmed.call(this, trs, sender, function (err) {
 			if (err) {
-				this.scope.account.merge(sender.address, {u_balance: amount}, function (err2) {
+				this.scope.account.merge(sender.address, { u_balance: amount }, function (err2) {
 					return setImmediate(cb, err2 || err);
 				});
 			} else {
@@ -908,14 +910,14 @@ Transaction.prototype.applyUnconfirmed = function (trs, sender, requester, cb) {
 Transaction.prototype.undoUnconfirmed = function (trs, sender, cb) {
 	var amount = new bignum(trs.amount.toString()).plus(trs.fee.toString()).toNumber();
 
-	this.scope.account.merge(sender.address, {u_balance: amount}, function (err, sender) {
+	this.scope.account.merge(sender.address, { u_balance: amount }, function (err, sender) {
 		if (err) {
 			return setImmediate(cb, err);
 		}
 
 		__private.types[trs.type].undoUnconfirmed.call(this, trs, sender, function (err) {
 			if (err) {
-				this.scope.account.merge(sender.address, {u_balance: -amount}, function (err2) {
+				this.scope.account.merge(sender.address, { u_balance: -amount }, function (err2) {
 					return setImmediate(cb, err2 || err);
 				});
 			} else {
