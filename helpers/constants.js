@@ -58,19 +58,20 @@
  * @property {number} unconfirmedTransactionTimeOut - 1080 blocks
  */
 module.exports = {
-	currentVersion: '7.4.0t',
+	currentVersion: '7.5.0t',
 	minVersion: [
-		{ height: 1,      ver: '^6.0.1t'},
-		{ height: 370000, ver: '^6.3.0t'},
-		{ height: 640000, ver: '^6.5.0t'},
-		{ height: 1617500, ver: '^6.8.0t'},
-		{ height: 2700000, ver: '>=6.8.0t'},
-		{ height: 2725930, ver: '>6.9.0t'},
-		{ height: 2924610, ver: '^7.0.0t'},
-		{ height: 2954429, ver: '^7.1.0t'},
-		{ height: 4000000, ver: '^7.2.0t'},
-		{ height: 4044800, ver: '^7.3.0t'},
-		{ height: 4125925, ver: '^7.4.0t'}
+		{ height: 1, ver: '^6.0.1t' },
+		{ height: 370000, ver: '^6.3.0t' },
+		{ height: 640000, ver: '^6.5.0t' },
+		{ height: 1617500, ver: '^6.8.0t' },
+		{ height: 2700000, ver: '>=6.8.0t' },
+		{ height: 2725930, ver: '>6.9.0t' },
+		{ height: 2924610, ver: '^7.0.0t' },
+		{ height: 2954429, ver: '^7.1.0t' },
+		{ height: 4000000, ver: '^7.2.0t' },
+		{ height: 4044800, ver: '^7.3.0t' },
+		{ height: 4125925, ver: '^7.4.0t' },
+		{ height: 4162436, ver: '^7.5.0t' }
 	],
 	activeDelegates: 101,
 	addressLength: 208,
@@ -79,8 +80,8 @@ module.exports = {
 	blockTime: 27000,
 	blockReceiptTimeOut: 27 * 2, // 2 blocks
 	blockVersion: [
-		{ height: 1, ver: 0},
-		{ height: 2924610, ver: 1}
+		{ height: 1, ver: 0 },
+		{ height: 2924610, ver: 1 }
 	],
 	confirmationLength: 77,
 	epochTime: new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0)),
@@ -149,16 +150,16 @@ module.exports = {
 		'6d90dfdc4be3861b9fa3374a2d839bae6aa3aada3cc37de145cf29f44ab4cb99'
 	],
 	rewards: [
-		{ height: 1,        reward: 0,         salary: 0 },
-		{ height: 10,       reward: 100000000, salary: 0 },
-		{ height: 11,       reward: 30000000,  salary: 0 },
-		{ height: 12,       reward: 20000000,  salary: 0 },
-		{ height: 13,       reward: 100000000, salary: 0 },
-		{ height: 640000,   reward: 110000000, salary: 0 },
-		{ height: 1617500,  reward: 100000000, salary: 10000000 },
-		{ height: 3164000,  reward: 90000000,  salary: 10000000 },
-		{ height: 4000000,  reward: 80000000,  salary: 0 },
-		{ height: 4119525,  reward: 100000000,  salary: 0 } // ~ Wed 12PM CST 09/02/2020
+		{ height: 1, reward: 0, salary: 0 },
+		{ height: 10, reward: 100000000, salary: 0 },
+		{ height: 11, reward: 30000000, salary: 0 },
+		{ height: 12, reward: 20000000, salary: 0 },
+		{ height: 13, reward: 100000000, salary: 0 },
+		{ height: 640000, reward: 110000000, salary: 0 },
+		{ height: 1617500, reward: 100000000, salary: 10000000 },
+		{ height: 3164000, reward: 90000000, salary: 10000000 },
+		{ height: 4000000, reward: 80000000, salary: 0 },
+		{ height: 4119525, reward: 100000000, salary: 0 } // ~ Wed 12PM CST 09/02/2020
 	],
 	locks: [
 		{ height: 1, replication: 3, ratioFactor: 100, buffer: 10 }
