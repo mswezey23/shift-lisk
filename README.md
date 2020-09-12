@@ -47,7 +47,7 @@ Rebuild blockchain from official snapshot
 
 ## Authors
 - Matt Swezey <matt@pactum.io>
-- Ralfs <ralfs@shiftproject.com>
+- Ralfs <ralfs@shiftnrg.org>
 - Goldeneye (Shift Team)
 - Joey <shiftcurrency@gmail.com>
 - Isabella Dell <isabella@lightcurve.io>
@@ -66,7 +66,7 @@ This program is free software: you can redistribute it and/or modify it under th
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the [GNU General Public License](https://github.com/shiftproject/shift/tree/master/LICENSE) along with this program.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the [GNU General Public License](https://github.com/shiftnrg/shift-lisk/tree/master/LICENSE) along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ***
 
