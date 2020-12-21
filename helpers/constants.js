@@ -49,7 +49,7 @@ module.exports = {
 		{ height: 1015000, ver: '^6.6.2'},
 		{ height: 1996000, ver: '^6.8.0'},
 		{ height: 4409979, ver: '^6.9.0'},
-		{ height: 4775592, ver: '^6.10.0' } // ~ Jan 5th, 2021 11 AM CST
+		{ height: 4775539, ver: '^6.10.0' } // ~ Jan 5th, 2021 11 AM CST
 	],
 	activeDelegates: 101,
 	addressLength: 208,
@@ -119,7 +119,7 @@ module.exports = {
 		{ height: 3164000,  reward: 70000000,   salary: 8000000 },
 		{ height: 4332000,  reward: 50000000,   salary: 6000000 },
 		{ height: 4409979,  reward: 100000000,  salary: 0 }, 	// ~Friday 12PM CST 09/11/2020
-		{ height: 5929192,  reward: 0,  		salary: 0 } 	// ~Friday 11:00 PM CST 12/31/2021
+		{ height: 5929139,  reward: 0,			salary: 0 } 	// ~Friday 11:00 PM CST 12/31/2021
 	],
 	signatureLength: 196,
 	totalAmount: 1009000000000000,
